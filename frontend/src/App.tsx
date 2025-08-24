@@ -10,27 +10,6 @@ import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import AuthProvider from './components/AuthProvider';
 
-// Simple test pages
-const HomePage = () => (
-  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-    <div className="text-center">
-      <h1 className="text-4xl font-bold text-gray-900 mb-4">
-        Portfolio Tracker
-      </h1>
-      <p className="text-gray-600 mb-8">
-        Homepage funcionando ✅
-      </p>
-      <div className="space-x-4">
-        <a href="/app" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          Entrar na App
-        </a>
-        <a href="/login" className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-          Login
-        </a>
-      </div>
-    </div>
-  </div>
-);
 
 
 // Create a simple query client
@@ -51,7 +30,7 @@ function App() {
       <AuthProvider>
         <Router>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             
@@ -73,7 +52,7 @@ function App() {
             </Route>
             
             {/* Catch all route */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </Router>
       </AuthProvider>
