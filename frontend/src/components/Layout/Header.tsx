@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   BellIcon, 
   UserCircleIcon,
@@ -61,8 +62,8 @@ const Header: React.FC = () => {
                 <div className="py-1">
                   <Menu.Item>
                     {({ active }) => (
-                      <a
-                        href="/profile"
+                      <Link
+                        to="/app/settings"
                         className={classNames(
                           active ? 'bg-gray-50' : '',
                           'flex items-center px-4 py-2 text-sm text-gray-700'
@@ -70,7 +71,7 @@ const Header: React.FC = () => {
                       >
                         <UserCircleIcon className="mr-3 h-4 w-4" />
                         Profile
-                      </a>
+                      </Link>
                     )}
                   </Menu.Item>
                   <Menu.Item>

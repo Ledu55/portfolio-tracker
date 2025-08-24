@@ -10,11 +10,11 @@ import {
 import { classNames } from '../../utils/classNames';
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: ChartBarIcon },
-  { name: 'Portfolios', href: '/portfolios', icon: ChartPieIcon },
-  { name: 'Transactions', href: '/transactions', icon: BanknotesIcon },
-  { name: 'Add Transaction', href: '/transactions/new', icon: PlusIcon },
-  { name: 'Settings', href: '/settings', icon: Cog6ToothIcon },
+  { name: 'Dashboard', href: '/app', icon: ChartBarIcon },
+  { name: 'Portfolios', href: '/app/portfolios', icon: ChartPieIcon },
+  { name: 'Transactions', href: '/app/transactions', icon: BanknotesIcon },
+  { name: 'Add Transaction', href: '/app/transactions/new', icon: PlusIcon },
+  { name: 'Settings', href: '/app/settings', icon: Cog6ToothIcon },
 ];
 
 const Sidebar: React.FC = () => {
