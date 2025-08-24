@@ -8,6 +8,7 @@ import {
   Cog6ToothIcon 
 } from '@heroicons/react/24/outline';
 import { classNames } from '../../utils/classNames';
+import { useAuthStore } from '../../store/authStore';
 
 const navigation = [
   { name: 'Dashboard', href: '/app', icon: ChartBarIcon },
@@ -18,6 +19,15 @@ const navigation = [
 ];
 
 const Sidebar: React.FC = () => {
+  const user = useAuthStore((state) => state.user);
+  
+  // Get the first letter of user's name for avatar
+  const getUserInitial = () => {
+    if (user?.full_name) return user.full_name.charAt(0).toUpperCase();
+    if (user?.username) return user.username.charAt(0).toUpperCase();
+    return 'U';
+  };
+
   return (
     <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
       {/* Logo */}
@@ -66,11 +76,13 @@ const Sidebar: React.FC = () => {
       <div className="p-4 border-t border-gray-200">
         <div className="flex items-center">
           <div className="h-8 w-8 bg-primary-600 rounded-full flex items-center justify-center">
-            <span className="text-sm font-medium text-white">U</span>
+            <span className="text-sm font-medium text-white">{getUserInitial()}</span>
           </div>
           <div className="ml-3">
-            <p className="text-sm font-medium text-gray-700">User</p>
-            <p className="text-xs text-gray-500">user@example.com</p>
+            <p className="text-sm font-medium text-gray-700">
+              {user?.full_name || user?.username || 'User'}
+            </p>
+            <p className="text-xs text-gray-500">{user?.email}</p>
           </div>
         </div>
       </div>
