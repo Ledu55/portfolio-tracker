@@ -7,6 +7,8 @@ import Layout from './components/Layout/Layout';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ProtectedRoute from './components/ProtectedRoute';
+import AuthProvider from './components/AuthProvider';
 
 // Simple test pages
 const HomePage = () => (
@@ -46,26 +48,35 @@ function App() {
   
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          
-          {/* App routes with layout */}
-          <Route path="/app" element={<Layout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="portfolios" element={<div className="p-8 text-center">Portfolios Page Coming Soon...</div>} />
-            <Route path="transactions" element={<div className="p-8 text-center">Transactions Page Coming Soon...</div>} />
-            <Route path="transactions/new" element={<div className="p-8 text-center">Add Transaction Page Coming Soon...</div>} />
-            <Route path="settings" element={<div className="p-8 text-center">Settings Page Coming Soon...</div>} />
-          </Route>
-          
-          {/* Catch all route */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            
+            {/* Protected app routes with layout */}
+            <Route 
+              path="/app" 
+              element={
+                <ProtectedRoute>
+                  <Layout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Dashboard />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="portfolios" element={<div className="p-8 text-center">Portfolios Page Coming Soon...</div>} />
+              <Route path="transactions" element={<div className="p-8 text-center">Transactions Page Coming Soon...</div>} />
+              <Route path="transactions/new" element={<div className="p-8 text-center">Add Transaction Page Coming Soon...</div>} />
+              <Route path="settings" element={<div className="p-8 text-center">Settings Page Coming Soon...</div>} />
+            </Route>
+            
+            {/* Catch all route */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

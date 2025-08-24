@@ -16,6 +16,7 @@ const Register: React.FC = () => {
     confirmPassword: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const registerMutation = useRegister();
@@ -54,11 +55,21 @@ const Register: React.FC = () => {
         full_name: formData.full_name || undefined,
         password: formData.password,
       });
+      
+      // Show success message
+      setIsSuccess(true);
+      
+      // Brief delay before redirect to show success message
+      setTimeout(() => {
+        // The redirect will happen automatically through the auth store state change
+      }, 1500);
+      
     } catch (error: any) {
       if (error.response?.status === 400) {
-        setErrors({ general: 'User with this email or username already exists' });
+        const errorMessage = error.response?.data?.detail || 'User with this email or username already exists';
+        setErrors({ general: errorMessage });
       } else {
-        setErrors({ general: 'An error occurred. Please try again.' });
+        setErrors({ general: 'An error occurred during registration. Please try again.' });
       }
     }
   };
@@ -89,10 +100,21 @@ const Register: React.FC = () => {
         </div>
 
         <Card>
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-6 pb-4" onSubmit={handleSubmit}>
             {errors.general && (
               <div className="bg-danger-50 border border-danger-200 rounded-lg p-3">
                 <p className="text-sm text-danger-700">{errors.general}</p>
+              </div>
+            )}
+
+            {isSuccess && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                <p className="text-sm text-green-700 flex items-center">
+                  <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  Account created successfully! Logging you in...
+                </p>
               </div>
             )}
 
@@ -148,10 +170,27 @@ const Register: React.FC = () => {
 
             <Button
               type="submit"
-              className="w-full"
-              isLoading={registerMutation.isPending}
+              className="w-full bg-blue-600 text-white hover:bg-blue-700 focus:bg-blue-700 py-3 px-4 rounded-lg font-medium"
+              style={{ 
+                backgroundColor: '#2563eb', 
+                color: 'white',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                border: 'none',
+                fontSize: '14px',
+                fontWeight: '500',
+                cursor: 'pointer',
+                minHeight: '44px'
+              }}
+              isLoading={registerMutation.isPending || isSuccess}
+              disabled={isSuccess}
             >
-              Create account
+              {registerMutation.isPending 
+                ? 'Creating account...' 
+                : isSuccess 
+                ? 'Account created!' 
+                : 'Create account'
+              }
             </Button>
           </form>
         </Card>

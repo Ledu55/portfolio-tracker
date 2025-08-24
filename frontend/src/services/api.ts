@@ -157,7 +157,15 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Clear token and redirect to login
       localStorage.removeItem('access_token');
-      window.location.href = '/login';
+      // Use import to avoid circular dependency
+      import('../store/authStore').then(({ useAuthStore }) => {
+        useAuthStore.getState().logout();
+      });
+      
+      // Only redirect if not already on auth pages
+      if (!window.location.pathname.includes('/login') && !window.location.pathname.includes('/register')) {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
@@ -180,6 +188,11 @@ export const authAPI = {
 
   register: async (data: UserCreate): Promise<User> => {
     const response = await api.post('/auth/register', data);
+    return response.data;
+  },
+
+  getProfile: async (): Promise<User> => {
+    const response = await api.get('/auth/me');
     return response.data;
   },
 };

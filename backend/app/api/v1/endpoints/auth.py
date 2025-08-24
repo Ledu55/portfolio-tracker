@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from ....core.database import get_db
 from ....core.security import create_access_token, verify_password, get_password_hash
 from ....core.config import settings
+from ...deps import get_current_user
 from ....models import User
 from ....schemas import Token, User as UserSchema, UserCreate
 
@@ -78,3 +79,11 @@ def register_user(
     db.refresh(user)
     
     return user
+
+
+@router.get("/me", response_model=UserSchema)
+def get_current_user_profile(
+    current_user: User = Depends(get_current_user),
+) -> Any:
+    """Get current user profile information"""
+    return current_user

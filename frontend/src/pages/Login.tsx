@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { ChartBarIcon } from '@heroicons/react/24/outline';
 import { useAuthStore } from '../store/authStore';
 import { useLogin } from '../hooks/useAuth';
@@ -16,10 +16,14 @@ const Login: React.FC = () => {
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const loginMutation = useLogin();
+  const location = useLocation();
+  
+  // Get the intended destination from location state, default to /app
+  const from = location.state?.from?.pathname || '/app';
 
   // Redirect if already authenticated
   if (isAuthenticated) {
-    return <Navigate to="/app" replace />;
+    return <Navigate to={from} replace />;
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -63,7 +67,7 @@ const Login: React.FC = () => {
         </div>
 
         <Card>
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-6 pb-4" onSubmit={handleSubmit}>
             {errors.general && (
               <div className="bg-danger-50 border border-danger-200 rounded-lg p-3">
                 <p className="text-sm text-danger-700">{errors.general}</p>
@@ -92,10 +96,21 @@ const Login: React.FC = () => {
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-blue-600 text-white hover:bg-blue-700 focus:bg-blue-700 py-3 px-4 rounded-lg font-medium"
+              style={{ 
+                backgroundColor: '#2563eb', 
+                color: 'white',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                border: 'none',
+                fontSize: '14px',
+                fontWeight: '500',
+                cursor: 'pointer',
+                minHeight: '44px'
+              }}
               isLoading={loginMutation.isPending}
             >
-              Sign in
+              {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>
         </Card>

@@ -39,6 +39,8 @@ interface AuthState {
   register: (data: UserCreate) => Promise<void>;
   logout: () => void;
   setLoading: (loading: boolean) => void;
+  initializeAuth: () => Promise<void>;
+  setUser: (user: User) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -57,7 +59,11 @@ export const useAuthStore = create<AuthState>()(
           // Store token
           localStorage.setItem('access_token', tokenResponse.access_token);
           
+          // Fetch user profile
+          const user = await authAPI.getProfile();
+          
           set({
+            user,
             token: tokenResponse.access_token,
             isAuthenticated: true,
             isLoading: false,
@@ -100,6 +106,38 @@ export const useAuthStore = create<AuthState>()(
 
       setLoading: (loading: boolean) => {
         set({ isLoading: loading });
+      },
+
+      initializeAuth: async () => {
+        const storedToken = localStorage.getItem('access_token');
+        if (!storedToken) {
+          set({ isAuthenticated: false, token: null, user: null });
+          return;
+        }
+
+        try {
+          set({ isLoading: true });
+          const user = await authAPI.getProfile();
+          set({
+            user,
+            token: storedToken,
+            isAuthenticated: true,
+            isLoading: false,
+          });
+        } catch (error) {
+          // Token is invalid, clear auth state
+          localStorage.removeItem('access_token');
+          set({
+            user: null,
+            token: null,
+            isAuthenticated: false,
+            isLoading: false,
+          });
+        }
+      },
+
+      setUser: (user: User) => {
+        set({ user });
       },
     }),
     {
