@@ -12,7 +12,7 @@ import { classNames } from '../utils/classNames';
 
 const Dashboard: React.FC = () => {
   const { data: portfolios, isLoading: portfoliosLoading } = usePortfolios();
-  const { data: marketSummary, isLoading: marketLoading } = useMarketSummary();
+  const { data: marketSummary } = useMarketSummary();
 
   const totalStats = portfolios?.reduce(
     (acc, portfolio) => ({
@@ -186,7 +186,7 @@ const Dashboard: React.FC = () => {
                     portfolio.total_pnl >= 0 ? "text-success-600" : "text-danger-600"
                   )}>
                     {portfolio.total_pnl >= 0 ? '+' : ''}
-                    {portfolio.total_pnl_percentage.toFixed(2)}%
+                    {Number(portfolio.total_pnl_percentage || 0).toFixed(2)}%
                   </p>
                 </div>
               </div>

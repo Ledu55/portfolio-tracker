@@ -7,7 +7,10 @@ export const useMarketSummary = () => {
 
   return useQuery({
     queryKey: ['market-summary'],
-    queryFn: fetchMarketSummary,
+    queryFn: async () => {
+      await fetchMarketSummary();
+      return useMarketStore.getState().marketSummary;
+    },
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchInterval: 5 * 60 * 1000, // Auto-refresh every 5 minutes
   });

@@ -74,19 +74,21 @@ export interface Position {
 }
 
 // Transaction types
-export enum TransactionType {
-  BUY = "buy",
-  SELL = "sell",
-  DIVIDEND = "dividend",
-  SPLIT = "split"
-}
+export const TransactionType = {
+  BUY: "buy" as const,
+  SELL: "sell" as const,
+  DIVIDEND: "dividend" as const,
+  SPLIT: "split" as const,
+};
+
+export type TransactionTypeValue = typeof TransactionType[keyof typeof TransactionType];
 
 export interface Transaction {
   id: number;
   symbol: string;
   company_name?: string;
   market: string;
-  transaction_type: TransactionType;
+  transaction_type: TransactionTypeValue;
   quantity: number;
   price: number;
   total_amount: number;
@@ -102,7 +104,7 @@ export interface TransactionCreate {
   symbol: string;
   company_name?: string;
   market: string;
-  transaction_type: TransactionType;
+  transaction_type: TransactionTypeValue;
   quantity: number;
   price: number;
   fees?: number;
@@ -115,7 +117,7 @@ export interface TransactionUpdate {
   symbol?: string;
   company_name?: string;
   market?: string;
-  transaction_type?: TransactionType;
+  transaction_type?: TransactionTypeValue;
   quantity?: number;
   price?: number;
   fees?: number;

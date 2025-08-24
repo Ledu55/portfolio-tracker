@@ -44,7 +44,10 @@ export const usePortfolios = () => {
 
   return useQuery({
     queryKey: ['portfolios'],
-    queryFn: fetchPortfolios,
+    queryFn: async () => {
+      await fetchPortfolios();
+      return usePortfolioStore.getState().portfolios;
+    },
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
@@ -54,7 +57,10 @@ export const usePortfolio = (id: number | undefined) => {
 
   return useQuery({
     queryKey: ['portfolio', id],
-    queryFn: () => fetchPortfolioById(id!),
+    queryFn: async () => {
+      await fetchPortfolioById(id!);
+      return usePortfolioStore.getState().currentPortfolio;
+    },
     enabled: !!id,
     staleTime: 2 * 60 * 1000, // 2 minutes
   });
@@ -105,7 +111,10 @@ export const useTransactions = (portfolioId: number | undefined) => {
 
   return useQuery({
     queryKey: ['transactions', portfolioId],
-    queryFn: () => fetchTransactions(portfolioId!),
+    queryFn: async () => {
+      await fetchTransactions(portfolioId!);
+      return usePortfolioStore.getState().transactions;
+    },
     enabled: !!portfolioId,
     staleTime: 2 * 60 * 1000, // 2 minutes
   });

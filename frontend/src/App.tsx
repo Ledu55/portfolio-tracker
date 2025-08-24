@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -7,6 +6,8 @@ import Layout from './components/Layout/Layout';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Portfolios from './pages/Portfolios';
+import PortfolioDetail from './pages/PortfolioDetail';
 import ProtectedRoute from './components/ProtectedRoute';
 import AuthProvider from './components/AuthProvider';
 
@@ -45,7 +46,8 @@ function App() {
             >
               <Route index element={<Dashboard />} />
               <Route path="dashboard" element={<Dashboard />} />
-              <Route path="portfolios" element={<div className="p-8 text-center">Portfolios Page Coming Soon...</div>} />
+              <Route path="portfolios" element={<Portfolios />} />
+              <Route path="portfolios/:id" element={<PortfolioDetail />} />
               <Route path="transactions" element={<div className="p-8 text-center">Transactions Page Coming Soon...</div>} />
               <Route path="transactions/new" element={<div className="p-8 text-center">Add Transaction Page Coming Soon...</div>} />
               <Route path="settings" element={<div className="p-8 text-center">Settings Page Coming Soon...</div>} />

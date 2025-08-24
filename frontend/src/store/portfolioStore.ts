@@ -239,7 +239,7 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
   updateTransaction: async (id: number, data: TransactionUpdate) => {
     try {
       set({ isLoading: true, error: null });
-      const transaction = await transactionAPI.update(id, data);
+      await transactionAPI.update(id, data);
       
       // Refresh transactions and portfolio
       const currentPortfolio = get().currentPortfolio;
